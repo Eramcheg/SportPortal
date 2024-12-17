@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from sportApp.models import Player, Match, Set, Game
+from sportApp.models import Player, Match
 
 
 def parse_matches_from_url(url):

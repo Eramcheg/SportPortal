@@ -1,9 +1,11 @@
 from django.contrib import admin
 
-from sportApp.models import Player, Match, Set, Game, Tournament
+from sportApp.models import Tournament, Season, Player, Match, Score, Statistic
 
 # Register your models here.
 admin.site.register(Player)
+admin.site.register(Season)
+admin.site.register(Tournament)
 admin.site.register(Match)
-admin.site.register(Set)
-admin.site.register(Game)
+admin.site.register(Score)
+admin.site.register(Statistic)
