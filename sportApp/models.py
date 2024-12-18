@@ -27,10 +27,20 @@ class Season(models.Model):
 
 class Player(models.Model):
     name = models.CharField(max_length=255)
+    full_name = models.CharField(max_length=255, blank=True, null=True)
     slug = models.SlugField(unique=True)
-    short_name = models.CharField(max_length=100, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
-    national = models.BooleanField(default=False)
+    birthdate = models.CharField(max_length=100, blank=True, null=True)
+    plays = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Team(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True)
+    players = models.ManyToManyField(Player)
 
     def __str__(self):
         return self.name
@@ -38,22 +48,25 @@ class Player(models.Model):
 
 class Match(models.Model):
     season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name="matches")
-    home_player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="home_matches")
-    away_player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="away_matches")
-    status = models.CharField(max_length=50)  # e.g., "finished", "in progress"
-    winner = models.ForeignKey(Player, on_delete=models.SET_NULL, related_name="wins", null=True, blank=True)
+    home_player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="home_matches", null=True, blank=True)
+    away_player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="away_matches", null=True, blank=True)
+    home_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="home_matches", null=True, blank=True)
+    away_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="away_matches", null=True, blank=True)
+    status = models.CharField(max_length=50)
     start_timestamp = models.DateTimeField()
+    winner_team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True, related_name="wins")
+    winner_player = models.ForeignKey(Player, on_delete=models.SET_NULL, null=True, blank=True, related_name="player_wins")
     slug = models.SlugField(unique=True)
 
     def __str__(self):
-        return f"{self.home_player} vs {self.away_player} ({self.season})"
+        return self.slug
 
 
 class Score(models.Model):
     match = models.OneToOneField(Match, on_delete=models.CASCADE, related_name="score")
     home_total = models.IntegerField()
     away_total = models.IntegerField()
-    period_scores = models.JSONField()  # Example: {"1st set": [4, 6], "2nd set": [1, 6]}
+    period_scores = models.JSONField()
 
     def __str__(self):
         return f"Score: {self.home_total} - {self.away_total}"

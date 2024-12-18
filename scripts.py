@@ -23,8 +23,8 @@ def parse_matches_from_url(url):
         match_date = datetime.strptime(date_text, "%Y-%m-%d")
 
         # Добавляем игроков в базу данных или получаем существующих
-        player1, _ = Player.objects.get_or_create(name=player1_name)
-        player2, _ = Player.objects.get_or_create(name=player2_name)
+        player1, _ = Player.objects.get_or_create(short_name=player1_name)
+        player2, _ = Player.objects.get_or_create(short_name=player2_name)
 
         # Создаем запись о матче
         match_obj = Match.objects.create(
