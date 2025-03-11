@@ -10,7 +10,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         base_url = "https://api.sofascore.com/api/v1/team/"
 
-        team_id = 142942#462878
+        team_id = 223555#462878
         url = f"{base_url}{team_id}"
         print(f"Fetching data for {team_id}...")
         self.parse_matches(url)
