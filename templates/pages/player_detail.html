@@ -1,0 +1,20 @@
+{% extends 'widgets/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-4">
+    <h1>Игрок: {{ player.name }}</h1>
+    <p><strong>Slug:</strong> {{ player.slug }}</p>
+    <p><strong>Краткое имя:</strong> {{ player.short_name|default:"не указано" }}</p>
+    <p>
+        <strong>Страна:</strong>
+        {% if player.country_name %}
+            {{ player.country_name }} ({{ player.country_alpha2 }})
+        {% else %}
+            не указана
+        {% endif %}
+    </p>
+    <p><strong>API ID:</strong> {{ player.api_id|default:"не указан" }}</p>
+    <a href="javascript:history.back()" class="btn btn-primary mt-3">Назад</a>
+</div>
+{% endblock %}

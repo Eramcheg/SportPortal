@@ -1,0 +1,24 @@
+{% extends 'widgets/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-4">
+    <h1>Команда: {{ team.name }}</h1>
+    <p><strong>API ID:</strong> {{ team.api_id }}</p>
+    <p><strong>Slug:</strong> {{ team.slug }}</p>
+
+    <h2 class="mt-4">Состав команды</h2>
+    {% if team.players.all %}
+    <ul class="list-group">
+        {% for player in team.players.all %}
+        <li class="list-group-item">
+            <a href="{% url 'player_detail' player.id %}">{{ player.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>Игроки не найдены.</p>
+    {% endif %}
+    <a href="javascript:history.back()" class="btn btn-primary mt-3">Назад</a>
+</div>
+{% endblock %}

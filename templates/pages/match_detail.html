@@ -1,0 +1,101 @@
+{% extends 'widgets/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-4">
+    <h1 class="mb-4">Матч: {{ match.home_team }} vs {{ match.away_team }}</h1>
+    <ul class="list-group mb-3">
+        <li class="list-group-item"><strong>ID события:</strong> {{ match.event_id }}</li>
+        <li class="list-group-item"><strong>Турнир:</strong> {{ match.tournament }}</li>
+        <li class="list-group-item"><strong>Сезон:</strong> {{ match.season }}</li>
+        <li class="list-group-item"><strong>Первый на подаче:</strong> {{ match.firstToServe|default:"нет данных" }}</li>
+        <li class="list-group-item"><strong>Раунд:</strong> {{ match.roundName|default:"не указан" }}</li>
+        <li class="list-group-item"><strong>Тип раунда:</strong> {{ match.roundType|default:"не указан" }}</li>
+        <li class="list-group-item">
+            <strong>Победитель:</strong>
+            {% if match.winner_code == 1 %}
+                {{ match.home_team }}
+            {% elif match.winner_code == 2 %}
+                {{ match.away_team }}
+            {% else %}
+                Не определен
+            {% endif %}
+        </li>
+        <li class="list-group-item">
+            <strong>Статус:</strong> {{ match.status_description|default:"нет данных" }} ({{ match.status_code|default:"-" }})
+        </li>
+        <li class="list-group-item">
+            <strong>Дата начала:</strong> {{ match.start_timestamp|date:"d.m.Y H:i" }}
+        </li>
+    </ul>
+    <a href="{% url 'match_list' %}" class="btn btn-primary mb-4">Назад к списку матчей</a>
+
+    <!-- Таблица сетов -->
+    <h2>Сеты</h2>
+    <table class="table table-bordered mb-4">
+        <thead>
+            <tr>
+                <th>Сет</th>
+                <th>Домашняя команда</th>
+                <th>Гостевая команда</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for set in match.sets.all %}
+                <tr>
+                    <td>{{ set.set_number }}</td>
+                    <td>{{ set.home_score }}</td>
+                    <td>{{ set.away_score }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">Нет данных по сетам.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Раздел детальной статистики -->
+    <h2>Детальная статистика</h2>
+    {% if statistics_data %}
+        {% for period in statistics_data %}
+            <h3>Период: {{ period.period }}</h3>
+            {% for group in period.groups %}
+                <h4>{{ group.groupName }}</h4>
+                <table class="table table-sm table-bordered mb-3">
+                    <thead>
+                        <tr>
+                            <th>Статистика</th>
+                            <th>Домашняя команда</th>
+                            <th>Гостевая команда</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stat in group.statisticsItems %}
+                            <tr>
+                                <td>{{ stat.name }}</td>
+                                <td>
+                                    {% if stat.home_total %}
+                                        {{ stat.home_value }} / {{ stat.home_total }} ({{ stat.home_percent }})
+                                    {% else %}
+                                        {{ stat.home_value }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if stat.away_total %}
+                                        {{ stat.away_value }} / {{ stat.away_total }} ({{ stat.away_percent }})
+                                    {% else %}
+                                        {{ stat.away_value }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endfor %}
+        {% endfor %}
+    {% else %}
+        <p>Статистика отсутствует.</p>
+    {% endif %}
+</div>
+{% endblock %}
