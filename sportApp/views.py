@@ -19,7 +19,7 @@ def generate_urls(start_date, end_date):
     return urls
 
 def home_page(request):
-    for team in Team.objects.all():
-        print(f"{team.name}: {[player.name for player in team.players.all()]}")
+    # for team in Team.objects.all():
+    #     print(f"{team.name}: {[player.name for player in team.players.all()]}")
 
     return render(request, 'home.html', )

@@ -18,8 +18,13 @@ from django.contrib import admin
 from django.urls import path
 
 from sportApp.views import home_page
+from sportApp.views_scripts.models_views import match_list, match_detail, team_detail, player_detail
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_page, name="homepage")
+    path('', home_page, name="homepage"),
+    path('matches/', match_list, name='match_list'),
+    path('matches/<int:match_id>/', match_detail, name='match_detail'),
+    path('teams/<int:team_id>/', team_detail, name='team_detail'),
+    path('players/<int:player_id>/', player_detail, name='player_detail'),
 ]
