@@ -11,6 +11,8 @@
         <li class="list-group-item"><strong>Первый на подаче:</strong> {{ match.firstToServe|default:"нет данных" }}</li>
         <li class="list-group-item"><strong>Раунд:</strong> {{ match.roundName|default:"не указан" }}</li>
         <li class="list-group-item"><strong>Тип раунда:</strong> {{ match.roundType|default:"не указан" }}</li>
+        <li class="list-group-item"><strong> Домашняя команда:</strong> <a href="{% url 'team_detail' match.home_team.id %}"> {{ match.home_team|default:"нет данных" }}</a></li>
+        <li class="list-group-item"><strong> Гостевая команда:</strong> <a href="{% url 'team_detail' match.away_team.id %}"> {{ match.away_team|default:"нет данных" }}</a></li>
         <li class="list-group-item">
             <strong>Победитель:</strong>
             {% if match.winner_code == 1 %}
